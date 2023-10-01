@@ -3,19 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adanylev <adanylev@student.42barcel>       +#+  +:+       +#+        */
+/*   By: adanylev <adanylev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:27:56 by adanylev          #+#    #+#             */
-/*   Updated: 2023/09/30 23:13:53 by adanylev         ###   ########.fr       */
+/*   Updated: 2023/10/01 22:02:00 by adanylev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-char *update_storage(char *storage, char *line)
+
+char	*line_extraction(char *storage)
+{
+	char	*line;
+	int		i;
+	int		a;
+	int		b;
+
+	a = 0;
+	i = 0;
+	b = 0;
+
+	while (storage[i] && storage[i] != '\n')
+		i++;
+	line = malloc(sizeof(char) * (i + 2));
+	if (!line)
+		return (NULL);
+	while (a < i)
+	{
+		line[b] = storage[a];
+		b++;
+		a++;
+	}
+	if (storage[a] == '\n')
+		line[b++] = '\n';
+	line[b] = '\0';
+	return (line);
+}
+
+char	*update_storage(char *storage, char *line)
 {
 	char	*tmp;
 
-	tmp = ft_substr(storage, ft_strlen(line) + 1, ft_strlen(storage)
+	if (storage[0] == '\0')
+	{
+		free(storage);
+		return (NULL);
+	}
+	tmp = ft_substr(storage, ft_strlen(line), ft_strlen(storage)
 			- ft_strlen(line));
 	free(storage);
 	storage = tmp;
@@ -35,26 +69,24 @@ char	*ft_read(int fd, char *storage)
 	while (mbytesread > 0 && !ft_strchr(buffer, '\n'))
 	{
 		mbytesread = read(fd, buffer, BUFFER_SIZE);
-//		printf("Here the buffer is %s", buffer);
 		if (mbytesread == -1)
 		{
 			free(buffer);
+			free(storage);
 			return (NULL);
 		}
 		buffer[mbytesread] = '\0';
 		storage = ft_strjoin(storage, buffer);
 	}
-//	printf("here the storage is: %s", storage);
 	free(buffer);
-//	printf("storage in fd read is: %s\n", storage);
 	return (storage);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*storage;
+	static char	*storage = NULL;
 	char		*line;
-	
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!storage || (storage && !ft_strchr(storage, '\n')))
@@ -65,11 +97,15 @@ char	*get_next_line(int fd)
 	if (!line)
 	{
 		free(storage);
+		storage = NULL;
 		return (NULL);
 	}
-//	printf("line is:%s\n", line);
-	storage = update_storage(storage, line);	
-//	printf("updated storage: %s\n", storage);
+	if (*line == '\0')
+	{
+		free(line);
+		line = NULL;
+	}
+	storage = update_storage(storage, line);
 	return (line);
 }
 /*
@@ -82,10 +118,10 @@ int	main(void)
 	free(line);
 	line = get_next_line(fd);
 	printf("%s\n", line);
-	free(line);	
+	free(line);
 	line = get_next_line(fd);
 	printf("%s\n", line);
-	free(line);	
+	free(line);
 	line = get_next_line(fd);
 	printf("%s\n", line);
 	free(line);

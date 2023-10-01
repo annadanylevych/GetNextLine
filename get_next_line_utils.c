@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adanylev <adanylev@student.42barcel>       +#+  +:+       +#+        */
+/*   By: adanylev <adanylev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 20:30:41 by adanylev          #+#    #+#             */
-/*   Updated: 2023/09/30 23:13:57 by adanylev         ###   ########.fr       */
+/*   Updated: 2023/10/01 22:25:29 by adanylev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -36,11 +36,10 @@ char	*ft_strchr(const char *s, int c)
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	int		i;
 	char	*join;
+	int 	len1;
+	int 	len2;
 
-	i = 0;
-//	printf("Here is strjoin the len of buffer is %d and buffer is %s", ft_strlen(s2), s2);
 	if (!s1)
 	{
 		s1 = malloc(sizeof(char) * 1);
@@ -48,50 +47,40 @@ char	*ft_strjoin(char *s1, char *s2)
 			return (NULL);
 		s1[0] = '\0';
 	}
-	join = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-//	printf("Malloc success!");
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	join = malloc(sizeof(char) * (len1 + len2 + 1));
 	if (!join)
-		return (NULL);
-//	printf("in strjoin storage is %s and buffer is %s", s1, s2);
-	while (i < ft_strlen(s1) + ft_strlen(s2))
 	{
-		if (i < ft_strlen(s1))
-			join[i] = s1[i];
-		else
-			join[i] = s2[i - ft_strlen(s1)];
-		i++;
+		free(s1);
+		return (NULL);
 	}
-	join[i] = '\0';
+	join = ft_strjoin_copy(join, s1, s2);
 	free(s1);
 	return (join);
 }
 
-char	*line_extraction(char *storage)
+char	*ft_strjoin_copy(char *join, char *s1, char *s2)
 {
-	char	*line;
-	int		i;
-	int		a;
-	int		b;
+	int i;
+	int len1;
+	int len2;
 
-	a = 0;
 	i = 0;
-	b = 0;
-	while (storage[i] && storage[i] != '\n')
-		i++;
-	line = malloc(sizeof(char) * (i + 2));
-	if (!line)
-		return (NULL);
-	while (a < i)
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	while (i < len1 + len2)
 	{
-		line[b] = storage[a];
-		b++;
-		a++;
+		if (i < len1)
+			join[i] = s1[i];
+		else
+			join[i] = s2[i - len1];
+		i++;
 	}
-	if (storage[a] == '\n')
-		line[b++] = '\n';
-	line[b] = '\0';
-	return (line);
+	join[i] = '\0';
+	return join;
 }
+
 
 char	*ft_substr(char *s, int start, int len)
 {
@@ -99,8 +88,6 @@ char	*ft_substr(char *s, int start, int len)
 	int				i;
 
 	i = 0;
-	if (len > ft_strlen(s) - start)
-		len = ft_strlen(s) - start;
 	sub = malloc(sizeof(char) * (len + 1));
 	if (!sub)
 		return (NULL);

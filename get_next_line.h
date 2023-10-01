@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adanylev <adanylev@student.42barcel>       +#+  +:+       +#+        */
+/*   By: adanylev <adanylev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 21:01:21 by adanylev          #+#    #+#             */
-/*   Updated: 2023/09/30 23:13:59 by adanylev         ###   ########.fr       */
+/*   Updated: 2023/10/01 22:24:51 by adanylev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ char	*ft_strchr(const char *s, int c);
 char	*line_extraction(char *storage);
 char	*ft_substr(char *s, int a, int b);
 int		ft_strlen(char *s);
+char	*ft_strjoin_copy(char *join, char *s1, char *s2);
 
 #endif
