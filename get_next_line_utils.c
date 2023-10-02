@@ -6,7 +6,7 @@
 /*   By: adanylev <adanylev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 20:30:41 by adanylev          #+#    #+#             */
-/*   Updated: 2023/10/01 22:25:29 by adanylev         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:05:23 by adanylev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -37,8 +37,8 @@ char	*ft_strchr(const char *s, int c)
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*join;
-	int 	len1;
-	int 	len2;
+	int		len1;
+	int		len2;
 
 	if (!s1)
 	{
@@ -62,9 +62,9 @@ char	*ft_strjoin(char *s1, char *s2)
 
 char	*ft_strjoin_copy(char *join, char *s1, char *s2)
 {
-	int i;
-	int len1;
-	int len2;
+	int	i;
+	int	len1;
+	int	len2;
 
 	i = 0;
 	len1 = ft_strlen(s1);
@@ -78,9 +78,8 @@ char	*ft_strjoin_copy(char *join, char *s1, char *s2)
 		i++;
 	}
 	join[i] = '\0';
-	return join;
+	return (join);
 }
-
 
 char	*ft_substr(char *s, int start, int len)
 {

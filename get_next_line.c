@@ -6,7 +6,7 @@
 /*   By: adanylev <adanylev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:27:56 by adanylev          #+#    #+#             */
-/*   Updated: 2023/10/01 22:02:00 by adanylev         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:02:06 by adanylev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,24 @@ char	*line_extraction(char *storage)
 {
 	char	*line;
 	int		i;
-	int		a;
-	int		b;
 
-	a = 0;
 	i = 0;
-	b = 0;
-
 	while (storage[i] && storage[i] != '\n')
 		i++;
-	line = malloc(sizeof(char) * (i + 2));
+	if (storage[i] == '\n')
+		i++;
+	line = malloc(sizeof(char) * (i + 1));
 	if (!line)
 		return (NULL);
-	while (a < i)
+	i = 0;
+	while (storage[i] && storage[i] != '\n')
 	{
-		line[b] = storage[a];
-		b++;
-		a++;
+		line[i] = storage[i];
+		i++;
 	}
-	if (storage[a] == '\n')
-		line[b++] = '\n';
-	line[b] = '\0';
+	if (storage[i] && storage[i] == '\n')
+		line[i++] = '\n';
+	line[i] = '\0';
 	return (line);
 }
 
@@ -49,11 +46,10 @@ char	*update_storage(char *storage, char *line)
 		free(storage);
 		return (NULL);
 	}
-	tmp = ft_substr(storage, ft_strlen(line), ft_strlen(storage)
+	tmp = ft_substr(storage, ft_strlen(line), ft_strlen(storage) \
 			- ft_strlen(line));
 	free(storage);
-	storage = tmp;
-	return (storage);
+	return (tmp);
 }
 
 char	*ft_read(int fd, char *storage)
@@ -63,7 +59,10 @@ char	*ft_read(int fd, char *storage)
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
+	{
+		free(storage);
 		return (NULL);
+	}
 	buffer[0] = '\0';
 	mbytesread = 1;
 	while (mbytesread > 0 && !ft_strchr(buffer, '\n'))
@@ -114,7 +113,7 @@ int	main(void)
 	char *line;
 	int fd = open("test.txt", O_RDWR);
 	line = get_next_line(fd);
-	printf("%s\n", line);
+	printf("%s", line);
 	free(line);
 	line = get_next_line(fd);
 	printf("%s\n", line);
