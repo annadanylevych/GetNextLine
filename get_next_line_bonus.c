@@ -83,10 +83,10 @@ char	*ft_read(int fd, char *storage)
 
 char	*get_next_line(int fd)
 {
-	static char	*storage[OPEN_MAX] = {NULL};
+	static char	*storage[OPEN_MAX] = NULL;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= OPEN_MAX)
 		return (NULL);
 	if (!storage[fd] || (storage[fd] && !ft_strchr(storage[fd], '\n')))
 		storage[fd] = ft_read(fd, storage[fd]);
